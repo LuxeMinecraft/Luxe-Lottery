@@ -1,0 +1,7 @@
+name: LuxeLottery
+main: com.turt2live.luxe.lottery.Lottery
+version: 0.1a
+description: Custom lottery plugin
+author: Turt2Live
+website: http://mc.turt2live.com/plugins
+softdepend: [Vault]
