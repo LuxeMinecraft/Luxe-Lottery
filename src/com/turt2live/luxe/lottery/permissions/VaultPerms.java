@@ -29,15 +29,15 @@ public class VaultPerms {
 
 	public boolean has(Player player, String node, World world){
 		if(perms == null){
-			return Lottery.getInstance().hasPermission(player, node);
+			return player.hasPermission(node);
 		}
 		if(perms.hasSuperPermsCompat()){
-			return Lottery.getInstance().hasPermission(player, node);
+			return player.hasPermission(node);
 		}
 		try{
 			return perms.playerHas(world, player.getName(), node);
 		}catch(UnsupportedOperationException e){
-			return Lottery.getInstance().hasPermission(player, node);
+			return player.hasPermission(node);
 		}
 	}
 

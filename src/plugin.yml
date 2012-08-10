@@ -5,3 +5,15 @@ description: Custom lottery plugin
 author: Turt2Live
 website: http://mc.turt2live.com/plugins
 softdepend: [Vault]
+commands:
+  lottery:
+    aliases: [lotto]
+    description: Lottery command
+  lotteryadmin:
+    aliases: [la]
+    description: Lottery admin command
+    permission: lottery.admin
+permissions:
+  lottery.admin:
+    description: Allow /lotteryadmin
+    default: op

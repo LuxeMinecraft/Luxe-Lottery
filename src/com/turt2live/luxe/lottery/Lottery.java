@@ -1,5 +1,8 @@
 package com.turt2live.luxe.lottery;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,6 +23,7 @@ public class Lottery extends PluginWrapper implements Listener {
 
 	private VaultPerms perms;
 	private VaultEcon econ;
+	private Pot pot;
 
 	@Override
 	public void onEnable(){
@@ -37,15 +41,30 @@ public class Lottery extends PluginWrapper implements Listener {
 		if(plugin != null){
 			perms = new VaultPerms();
 			econ = new VaultEcon();
+			if(econ.isNull()){ // We require economy
+				getLogger().severe("This plugin requires Vault to work!");
+				getServer().getPluginManager().disablePlugin(this);
+				return;
+			}
 		}else{
 			getLogger().severe("This plugin requires Vault to work!");
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
 
+		// Setup lottery function
+		pot = new Pot();
+		pot.add(getConfig().getDouble("lottery.current-pot", 0));
+
 		// Commands setup
 		LotteryCommands commands = new LotteryCommands();
-		// TODO
+		/*
+		 * 		output.add(Lottery.formatCommand("", "/lottery", "", "Checks current lottery info."));
+		output.add(Lottery.formatCommand("", "/lottery", "buy [n]", "Buys one or [n] of lottery tickets."));
+		output.add(Lottery.formatCommand("", "/lottery", "winners", "Gets past lottery winners."));
+		output.add(Lottery.formatCommand("", "/lottery", "claim", "Claim your recent winnings."));
+		 */
+		getCommand("lottery").setExecutor(commands);
 
 		// Spam console
 		getLogger().info("Loaded! Plugin by turt2live");
@@ -54,6 +73,10 @@ public class Lottery extends PluginWrapper implements Listener {
 	@Override
 	public void onDisable(){
 		getLogger().info("Disabled! Plugin by turt2live");
+	}
+
+	public Pot getActivePot(){
+		return pot;
 	}
 
 	public VaultEcon getVaultEcon(){
@@ -77,6 +100,21 @@ public class Lottery extends PluginWrapper implements Listener {
 
 	public static String prefix(){
 		return ChatColor.translateAlternateColorCodes('&', Lottery.getInstance().getConfig().getString("general.prefix")).trim() + " ";
+	}
+
+	public static String formatMoney(double amount){
+		NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(Locale.US);
+		return (currencyFormatter.format(amount).replace('$', ' ') + " Luxe").trim();
+	}
+
+	public boolean isRecentWinner(String name){
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void showRecentWinners(CommandSender sender){
+		// TODO Auto-generated method stub
+
 	}
 
 }

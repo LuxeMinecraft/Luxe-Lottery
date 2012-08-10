@@ -32,4 +32,12 @@ public class VaultEcon {
 		econ.depositPlayer(account, cost);
 	}
 
+	public boolean canAfford(String account, double amount){
+		return econ.has(account, amount);
+	}
+
+	public boolean isNull(){
+		return econ == null;
+	}
+
 }
