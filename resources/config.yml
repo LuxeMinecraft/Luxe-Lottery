@@ -1,3 +1,6 @@
 # Lottery Plugin
 general:
   prefix: '[Luxe]'
+  cost-per-ticket: 10.0
+  max-tickets: 5
+  

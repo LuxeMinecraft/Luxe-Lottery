@@ -1,6 +1,8 @@
 package com.turt2live.luxe.lottery;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.bukkit.ChatColor;
@@ -11,6 +13,8 @@ import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
 import com.turt2live.luxe.lottery.economy.VaultEcon;
+import com.turt2live.luxe.lottery.pages.LuxeLotteryLine;
+import com.turt2live.luxe.lottery.pages.Pagination;
 import com.turt2live.luxe.lottery.permissions.VaultPerms;
 
 public class Lottery extends PluginWrapper implements Listener {
@@ -103,13 +107,32 @@ public class Lottery extends PluginWrapper implements Listener {
 	}
 
 	public boolean isRecentWinner(String name){
-		// TODO Auto-generated method stub
+		List<String> recent = getConfig().getStringList("winners");
+		if(recent != null){
+			for(String r : recent){
+				String[] parts = r.split(" ");
+				if(parts[0].equalsIgnoreCase(name)){
+					return true;
+				}
+			}
+		}
 		return false;
 	}
 
 	public void showRecentWinners(CommandSender sender){
-		// TODO Auto-generated method stub
-
+		reloadConfig();
+		List<String> raw = getConfig().getStringList("winners");
+		if(raw == null || raw.size() <= 0){
+			sender.sendMessage(prefix() + ChatColor.AQUA + "No one has recently won! Be the first, buy a ticket with /lottery buy");
+		}else{
+			List<LuxeLotteryLine> lines = new ArrayList<LuxeLotteryLine>();
+			for(String r : raw){
+				lines.add(new LuxeLotteryLine(r));
+			}
+			Pagination page = new Pagination(lines);
+			page.generate("Recent Winners", prefix(), ChatColor.DARK_AQUA, ChatColor.AQUA, ChatColor.GRAY);
+			page.showTo(sender, 1);
+		}
 	}
 
 }

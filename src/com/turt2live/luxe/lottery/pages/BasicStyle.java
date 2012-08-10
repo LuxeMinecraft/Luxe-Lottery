@@ -9,7 +9,7 @@ import org.bukkit.ChatColor;
  */
 public class BasicStyle extends Style {
 
-	private String header = "{C1}=======[ {C2}%s {C1}| {C3}Page %i/%i {C1}]=======";
+	private String header = "{C1}=======[ {C2}%s {C1}| {C3}Page %d/%d {C1}]=======";
 	private String footer = header;
 
 	/**
