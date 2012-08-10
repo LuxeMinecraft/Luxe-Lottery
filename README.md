@@ -3,7 +3,7 @@ Luxe-Lottery
 
 Lottery system based off of ImDeity's "DeityLottery".
 
-Adding customiaztion with self-dependencies.
+Adding customization with self-dependencies.
 
 ============
 
