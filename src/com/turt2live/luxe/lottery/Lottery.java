@@ -42,7 +42,7 @@ public class Lottery extends PluginWrapper implements Listener {
 			perms = new VaultPerms();
 			econ = new VaultEcon();
 			if(econ.isNull()){ // We require economy
-				getLogger().severe("This plugin requires Vault to work!");
+				getLogger().severe("This plugin requires Vault (and an economy) to work!");
 				getServer().getPluginManager().disablePlugin(this);
 				return;
 			}
@@ -58,13 +58,8 @@ public class Lottery extends PluginWrapper implements Listener {
 
 		// Commands setup
 		LotteryCommands commands = new LotteryCommands();
-		/*
-		 * 		output.add(Lottery.formatCommand("", "/lottery", "", "Checks current lottery info."));
-		output.add(Lottery.formatCommand("", "/lottery", "buy [n]", "Buys one or [n] of lottery tickets."));
-		output.add(Lottery.formatCommand("", "/lottery", "winners", "Gets past lottery winners."));
-		output.add(Lottery.formatCommand("", "/lottery", "claim", "Claim your recent winnings."));
-		 */
 		getCommand("lottery").setExecutor(commands);
+		getCommand("lotteryadmin").setExecutor(commands);
 
 		// Spam console
 		getLogger().info("Loaded! Plugin by turt2live");
