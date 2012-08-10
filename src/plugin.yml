@@ -9,6 +9,7 @@ commands:
   lottery:
     aliases: [lotto]
     description: Lottery command
+    permission: lottery.user
   lotteryadmin:
     aliases: [la]
     description: Lottery admin command
@@ -17,3 +18,6 @@ permissions:
   lottery.admin:
     description: Allow /lotteryadmin
     default: op
+  lottery.user:
+    description: Allow /lottery
+    default: true

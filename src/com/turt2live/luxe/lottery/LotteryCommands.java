@@ -33,6 +33,11 @@ public class LotteryCommands implements CommandExecutor {
 						sender.sendMessage(Lottery.prefix() + ChatColor.RED + "Don't be so greedy.");
 						return true;
 					}
+					if(plugin.getActiveTickets(sender.getName()) >= plugin.getConfig().getInt("general.max-tickets")){
+						sender.sendMessage(Lottery.prefix() + ChatColor.RED + "You have already bought the maximum number of tickets (" + plugin.getConfig().getInt("general.max-tickets") + ")");
+						sender.sendMessage(Lottery.prefix() + ChatColor.RED + "Don't be so greedy.");
+						return true;
+					}
 					if(amount < 1){
 						sender.sendMessage(Lottery.prefix() + ChatColor.RED + "Negative Tickets? Yea...that makes sense.");
 						return true;

@@ -106,6 +106,10 @@ public class Lottery extends PluginWrapper implements Listener {
 		return (currencyFormatter.format(amount).replace('$', ' ') + " Luxe").trim();
 	}
 
+	public int getActiveTickets(String owner){
+		return getConfig().getInt("tickets." + owner + ".amount", 0);
+	}
+
 	public boolean isRecentWinner(String name){
 		List<String> recent = getConfig().getStringList("winners");
 		if(recent != null){
