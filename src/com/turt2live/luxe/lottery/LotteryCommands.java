@@ -55,7 +55,15 @@ public class LotteryCommands implements CommandExecutor {
 				}else if(args[0].equalsIgnoreCase("winners")){
 					plugin.showRecentWinners(sender);
 				}else if(args[0].equalsIgnoreCase("claim")){
-					// TODO
+					double amount = plugin.getWaitingPrize(sender.getName());
+					if(amount > 0){
+						String winnings = Lottery.formatMoney(amount);
+						sender.sendMessage(Lottery.prefix() + ChatColor.GREEN + "You gained " + winnings + "!");
+						plugin.getVaultEcon().deposit(sender.getName(), amount);
+						plugin.clearWaitingPrize(sender.getName());
+					}else{
+						sender.sendMessage(Lottery.prefix() + ChatColor.RED + "You don't have any winnings to collect");
+					}
 				}else{
 					showHelp(sender);
 				}

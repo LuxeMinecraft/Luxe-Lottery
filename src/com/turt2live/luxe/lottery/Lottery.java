@@ -145,4 +145,10 @@ public class Lottery extends PluginWrapper implements Listener {
 		return getConfig().getDouble("prizes." + name, 0);
 	}
 
+	public void clearWaitingPrize(String name){
+		getConfig().set("prizes." + name, null);
+		saveConfig();
+		reloadConfig();
+	}
+
 }
