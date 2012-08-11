@@ -21,7 +21,7 @@ public class LuxeLotteryLine extends Line {
 			double a = Double.parseDouble(parts[1]);
 			winnings = Lottery.formatMoney(a);
 		}catch(Exception e){}
-		this.line = ChatColor.DARK_GREEN + parts[0] + ChatColor.GREEN + " won " + ChatColor.DARK_GREEN + winnings;
+		this.line = ChatColor.GREEN + parts[0] + ChatColor.DARK_GREEN + " won " + ChatColor.GREEN + winnings;
 	}
 
 }

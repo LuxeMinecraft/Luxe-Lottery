@@ -71,6 +71,7 @@ public class Lottery extends PluginWrapper implements Listener {
 
 	@Override
 	public void onDisable(){
+		pot.save();
 		getLogger().info("Disabled! Plugin by turt2live");
 	}
 
@@ -111,6 +112,7 @@ public class Lottery extends PluginWrapper implements Listener {
 	}
 
 	public boolean isRecentWinner(String name){
+		reloadConfig();
 		List<String> recent = getConfig().getStringList("winners");
 		if(recent != null){
 			for(String r : recent){
@@ -137,6 +139,10 @@ public class Lottery extends PluginWrapper implements Listener {
 			page.generate("Recent Winners", prefix(), ChatColor.DARK_AQUA, ChatColor.AQUA, ChatColor.GRAY);
 			page.showTo(sender, 1);
 		}
+	}
+
+	public double getWaitingPrize(String name){
+		return getConfig().getDouble("prizes." + name, 0);
 	}
 
 }

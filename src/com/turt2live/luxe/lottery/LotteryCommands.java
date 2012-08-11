@@ -60,7 +60,13 @@ public class LotteryCommands implements CommandExecutor {
 					showHelp(sender);
 				}
 			}else{
-				// TODO: Lottery info
+				String potAmount = Lottery.formatMoney(plugin.getActivePot().getAmount());
+				int tickets = plugin.getActiveTickets(sender.getName());
+				String costPer = Lottery.formatMoney(plugin.getConfig().getDouble("general.cost-per-ticket"));
+				sender.sendMessage(Lottery.prefix() + ChatColor.DARK_GREEN + "There is currently " + ChatColor.GREEN + potAmount + ChatColor.DARK_GREEN + " in the pot");
+				sender.sendMessage(Lottery.prefix() + ChatColor.DARK_GREEN + "You have " + ChatColor.GREEN + tickets + ChatColor.DARK_GREEN + " ticket" + (tickets == 0 || tickets > 1 ? "s" : ""));
+				sender.sendMessage(Lottery.prefix() + ChatColor.DARK_GREEN + "Tickets currently cost " + ChatColor.GREEN + costPer + ChatColor.DARK_GREEN + " per ticket");
+				sender.sendMessage(Lottery.prefix() + ChatColor.DARK_GREEN + "Type /lottery help for more information.");
 			}
 			return true;
 		}else if(command.getName().equalsIgnoreCase("lotteryadmin") && plugin.hasPermission(sender, "lottery.admin")){
