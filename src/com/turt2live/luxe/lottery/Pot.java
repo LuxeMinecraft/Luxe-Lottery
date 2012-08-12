@@ -39,6 +39,7 @@ public class Pot {
 
 	public void empty(){
 		amount = 0;
+		plugin.getConfig().set("lottery.current-pot", amount);
 	}
 
 	public void save(){
@@ -49,6 +50,9 @@ public class Pot {
 
 	public String draw(){
 		plugin.reloadConfig();
+		if(plugin.getConfig().getConfigurationSection("tickets") == null){
+			return null;
+		}
 		Set<String> participants = plugin.getConfig().getConfigurationSection("tickets").getKeys(false);
 		if(participants == null || participants.size() < 0){
 			return null;
@@ -66,6 +70,13 @@ public class Pot {
 			int index = random.nextInt(tickets.size());
 			return tickets.get(index).getOwner();
 		}
+	}
+
+	public void setWinner(String owner, double amount){
+		plugin.addRecentWinner(owner, amount);
+		plugin.getConfig().set("prizes." + owner, plugin.getConfig().getDouble("prizes." + owner, 0) + amount);
+		plugin.saveConfig();
+		plugin.reloadConfig();
 	}
 
 	public void reset(){

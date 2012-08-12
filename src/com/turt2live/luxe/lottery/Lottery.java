@@ -113,19 +113,15 @@ public class Lottery extends PluginWrapper implements Listener {
 
 	public boolean isRecentWinner(String name){
 		reloadConfig();
-		List<String> recent = getConfig().getStringList("winners");
-		if(recent != null){
-			for(String r : recent){
-				String[] parts = r.split(" ");
-				if(parts[0].equalsIgnoreCase(name)){
-					return true;
-				}
-			}
+		long now = System.currentTimeMillis();
+		Long expire = getConfig().getLong("winner." + name);
+		if(expire == null || expire == 0 || expire >= now){
+			return false;
 		}
-		return false;
+		return true;
 	}
 
-	public void showRecentWinners(CommandSender sender){
+	public void showRecentWinners(CommandSender sender, int pageNumber){
 		reloadConfig();
 		List<String> raw = getConfig().getStringList("winners");
 		if(raw == null || raw.size() <= 0){
@@ -137,8 +133,33 @@ public class Lottery extends PluginWrapper implements Listener {
 			}
 			Pagination page = new Pagination(lines);
 			page.generate("Recent Winners", prefix(), ChatColor.DARK_AQUA, ChatColor.AQUA, ChatColor.GRAY);
-			page.showTo(sender, 1);
+			if(pageNumber < 1){
+				pageNumber = 1;
+			}else if(pageNumber > page.maxPages()){
+				pageNumber = page.maxPages();
+			}
+			page.showTo(sender, pageNumber);
 		}
+	}
+
+	public void addRecentWinner(String winner, double amount){
+		// Only keep 10
+		reloadConfig();
+		long days10 = 24 * 60 * 60 * 1000; // Milliseconds
+		long nowPlus10Days = System.currentTimeMillis() + days10;
+		getConfig().set("winner." + winner, nowPlus10Days);
+		List<String> raw = getConfig().getStringList("winners");
+		if(raw == null){
+			raw = new ArrayList<String>();
+		}
+		List<String> newList = new ArrayList<String>();
+		newList.add(winner + " " + amount);
+		for(int i = 0; i < (raw.size() >= 9 ? 9 : raw.size()); i++){
+			newList.add(raw.get(i));
+		}
+		getConfig().set("winners", newList);
+		saveConfig();
+		reloadConfig();
 	}
 
 	public double getWaitingPrize(String name){
