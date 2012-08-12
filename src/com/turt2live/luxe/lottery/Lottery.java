@@ -116,6 +116,10 @@ public class Lottery extends PluginWrapper implements Listener {
 		long now = System.currentTimeMillis();
 		Long expire = getConfig().getLong("winner." + name);
 		if(expire == null || expire == 0 || expire >= now){
+			// Remove winner
+			getConfig().set("winner." + name, null);
+			saveConfig();
+			reloadConfig();
 			return false;
 		}
 		return true;
