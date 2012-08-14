@@ -1,6 +1,8 @@
 # Lottery Plugin
+# 'draw-every' is measured in hours
 general:
   prefix: '[Luxe]'
   cost-per-ticket: 10.0
   max-tickets: 5
+  draw-every: 1
   

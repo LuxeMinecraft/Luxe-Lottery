@@ -8,7 +8,9 @@ import java.util.Locale;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.feildmaster.lib.configuration.PluginWrapper;
@@ -16,6 +18,8 @@ import com.turt2live.luxe.lottery.economy.VaultEcon;
 import com.turt2live.luxe.lottery.pages.LuxeLotteryLine;
 import com.turt2live.luxe.lottery.pages.Pagination;
 import com.turt2live.luxe.lottery.permissions.VaultPerms;
+import com.turt2live.luxe.lottery.timer.Countdown;
+import com.turt2live.luxe.lottery.timer.CountdownLoop;
 
 public class Lottery extends PluginWrapper implements Listener {
 
@@ -28,6 +32,8 @@ public class Lottery extends PluginWrapper implements Listener {
 	private VaultPerms perms;
 	private VaultEcon econ;
 	private Pot pot;
+	private Countdown countdown;
+	private CountdownLoop cdLoop;
 
 	@Override
 	public void onEnable(){
@@ -65,6 +71,17 @@ public class Lottery extends PluginWrapper implements Listener {
 		getCommand("lottery").setExecutor(commands);
 		getCommand("lotteryadmin").setExecutor(commands);
 
+		// For login message
+		getServer().getPluginManager().registerEvents(this, this);
+
+		// Start countdown
+		long runtimeRaw = getConfig().getLong("general.draw-every");
+		long runtime = runtimeRaw * 60 * 60 * 20;
+		long left = getConfig().getLong("lottery.time-left", runtime);
+		countdown = new Countdown();
+		cdLoop = new CountdownLoop(left, runtime, countdown);
+		countdown.setListener(cdLoop);
+
 		// Spam console
 		getLogger().info("Loaded! Plugin by turt2live");
 	}
@@ -72,6 +89,8 @@ public class Lottery extends PluginWrapper implements Listener {
 	@Override
 	public void onDisable(){
 		pot.save();
+		countdown.close();
+		cdLoop.saveAndClose();
 		getLogger().info("Disabled! Plugin by turt2live");
 	}
 
@@ -174,6 +193,16 @@ public class Lottery extends PluginWrapper implements Listener {
 		getConfig().set("prizes." + name, null);
 		saveConfig();
 		reloadConfig();
+	}
+
+	@EventHandler
+	public void onJoin(PlayerJoinEvent event){
+		Player player = event.getPlayer();
+		double waiting = getWaitingPrize(player.getName());
+		if(waiting > 0){
+			player.sendMessage(prefix() + ChatColor.GOLD + "You have " + ChatColor.YELLOW + formatMoney(waiting) + ChatColor.GOLD + " waiting for you!");
+			player.sendMessage(prefix() + ChatColor.GREEN + "Type \"/lottery claim\" to collect it!");
+		}
 	}
 
 }
